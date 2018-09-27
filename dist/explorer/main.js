@@ -99,7 +99,6 @@ const platform_browser_1 = __webpack_require__(/*! @angular/platform-browser */ 
 const router_1 = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 const ngx_bootstrap_1 = __webpack_require__(/*! ngx-bootstrap */ "./node_modules/ngx-bootstrap/bundles/ngx-bootstrap.es2015.js");
 const ngx_qrcode2_1 = __webpack_require__(/*! ngx-qrcode2 */ "./node_modules/ngx-qrcode2/index.js");
-const typesafe_web3_1 = __webpack_require__(/*! typesafe-web3 */ "./node_modules/typesafe-web3/dist/lib/index.js");
 const app_component_1 = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
 const address_qrcode_component_1 = __webpack_require__(/*! ./components/address-qrcode/address-qrcode.component */ "./src/app/components/address-qrcode/address-qrcode.component.ts");
 const blocks_panel_component_1 = __webpack_require__(/*! ./components/blocks-panel/blocks-panel.component */ "./src/app/components/blocks-panel/blocks-panel.component.ts");
@@ -113,7 +112,9 @@ const hex_to_ascii_pipe_1 = __webpack_require__(/*! ./pipes/hex-to-ascii.pipe */
 const unix_timestamp_to_date_pipe_1 = __webpack_require__(/*! ./pipes/unix-timestamp-to-date.pipe */ "./src/app/pipes/unix-timestamp-to-date.pipe.ts");
 const routing_module_1 = __webpack_require__(/*! ./routing.module */ "./src/app/routing.module.ts");
 const address_service_1 = __webpack_require__(/*! ./services/address.service */ "./src/app/services/address.service.ts");
+const akroma_service_1 = __webpack_require__(/*! ./services/akroma.service */ "./src/app/services/akroma.service.ts");
 const block_service_1 = __webpack_require__(/*! ./services/block.service */ "./src/app/services/block.service.ts");
+const settings_service_1 = __webpack_require__(/*! ./services/settings.service */ "./src/app/services/settings.service.ts");
 const transaction_service_1 = __webpack_require__(/*! ./services/transaction.service */ "./src/app/services/transaction.service.ts");
 let AppModule = class AppModule {
 };
@@ -144,6 +145,7 @@ AppModule = __decorate([
             ngx_bootstrap_1.ModalModule.forRoot(),
             forms_1.FormsModule,
             forms_1.ReactiveFormsModule,
+            ngx_bootstrap_1.BsDropdownModule.forRoot(),
             ngx_qrcode2_1.NgxQRCodeModule,
             http_1.HttpClientModule,
         ],
@@ -151,19 +153,13 @@ AppModule = __decorate([
             block_service_1.BlockService,
             transaction_service_1.TransactionService,
             address_service_1.AddressService,
-            {
-                provide: typesafe_web3_1.TypeSafeWeb3,
-                useFactory: getTypeSafeWeb3
-            },
+            settings_service_1.SettingsService,
+            akroma_service_1.AkromaService,
         ],
         bootstrap: [app_component_1.AppComponent]
     })
 ], AppModule);
 exports.AppModule = AppModule;
-function getTypeSafeWeb3() {
-    return new typesafe_web3_1.TypeSafeWeb3('http://localhost:8545');
-}
-exports.getTypeSafeWeb3 = getTypeSafeWeb3;
 
 
 /***/ }),
@@ -186,7 +182,7 @@ module.exports = "<button type=\"button\" class=\"btn btn-akroma qr-link\" (clic
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  text-transform: uppercase;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  .akromaModal > div.modal-content {\n  border-radius: 0 !important;\n  background-color: rgba(255, 255, 255, 0.9); }\n  .qr-link {\n  font-weight: 700;\n  color: #fff;\n  background-color: transparent;\n  text-decoration: underline; }\n"
+module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .dropdown-akroma {\n  border-radius: 0;\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  .akromaModal > div.modal-content {\n  border-radius: 0 !important;\n  background-color: rgba(255, 255, 255, 0.9); }\n  .qr-link {\n  font-weight: 700;\n  color: #fff;\n  background-color: transparent;\n  text-decoration: underline; }\n"
 
 /***/ }),
 
@@ -256,7 +252,7 @@ module.exports = "<h1>Blocks</h1>\r\n<div class=\"pt-3\" *ngFor=\"let block of b
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  text-transform: uppercase;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n"
+module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .dropdown-akroma {\n  border-radius: 0;\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n"
 
 /***/ }),
 
@@ -314,7 +310,7 @@ exports.BlocksPanelComponent = BlocksPanelComponent;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"background\">\n    <div class=\"container h-100\">\n        <div class=\"row pt-4\">\n            <div class=\"col\">\n                <a href=\"/\">\n                    <img src=\"../../assets/images/akroma-logo-on-black.svg\" alt=\"Akroma\">\n                </a>\n            </div>\n            <div class=\"col text-right\">\n                <form class=\"form-inline my-2 my-lg-0 float-right\" [formGroup]=\"lookupForm\" (ngSubmit)=\"onSubmit()\" novalidate>\n                    <div class=\"input-group\">\n                        <input formControlName=\"lookup\" type=\"text\" class=\"form-control form-control-akroma\" placeholder=\"Address | Transaction | Block\" aria-label=\"\" aria-describedby=\"\">\n                        <div class=\"input-group-append\">\n                            <button class=\"btn btn-akroma\" type=\"submit\">search</button>\n                        </div>\n                    </div>\n                </form>\n            </div>\n        </div>\n    </div>\n</div>"
+module.exports = "<div class=\"background\">\n    <div class=\"container h-100\">\n        <div class=\"row pt-4\">\n            <div class=\"col\">\n                <a href=\"/\">\n                    <img src=\"../../assets/images/akroma-logo-on-black.svg\" alt=\"Akroma\">\n                </a>\n            </div>\n            <div class=\"col text-right\">\n                <form class=\"form-inline my-2 my-lg-0 float-right\" [formGroup]=\"lookupForm\" (ngSubmit)=\"onSubmit()\" novalidate>\n                    <div class=\"input-group\">\n                        <input formControlName=\"lookup\" type=\"text\" class=\"form-control form-control-akroma\" placeholder=\"Address | Transaction | Block\" aria-label=\"\" aria-describedby=\"\">\n                        <div class=\"input-group-append\">\n                            <button class=\"btn btn-akroma\" type=\"submit\">search</button>\n                        </div>\n                    </div>\n                </form>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col text-right\">\n                <button id=\"button-basic\" type=\"button\" class=\"btn btn-akroma\" (click)=\"openModal(connection)\">\n                    <span>{{ connectedTo }}</span>\n                    <span> &equiv;</span>\n                </button>\n            </div>\n        </div>\n    </div>\n</div>\n<ng-template #connection>\n    <div class=\"modal-body text-center\">\n        <div class=\"row\">\n            <div class=\"col\">\n                <h4>Current Connection: {{ connectedTo }}</h4>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col\">\n                <table class=\"table table-striped table-dark table-responsive-sm\">\n                    <thead>\n                        <tr>\n                            <th class=\"w-25\" i18n>Option</th>\n                            <th i18n>Connect</th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr>\n                            <td>https://remote.akroma.io (for testing only during beta)</td>\n                            <td><input type=\"button\" value=\"Connect\" (click)=\"setConnection('https://remote.akroma.io')\" class=\"btn btn-akroma text-white\" /></td>\n                        </tr>\n                        <tr>\n                            <td>https://2682.remote.akroma.io (for testing only during beta)</td>\n                            <td><input type=\"button\" value=\"Connect\" (click)=\"setConnection('https://2682.remote.akroma.io')\" class=\"btn btn-akroma text-white\" /></td>\n                        </tr>\n                        <tr>\n                            <td>https://2525.remote.akroma.io (for testing only during beta)</td>\n                            <td><input type=\"button\" value=\"Connect\" (click)=\"setConnection('https://2525.remote.akroma.io')\" class=\"btn btn-akroma text-white\" /></td>\n                        </tr>\n                        <tr>\n                            <td>http://localhost:8545</td>\n                            <td><input type=\"button\" value=\"Connect\" (click)=\"setConnection('http://localhost:8545')\" class=\"btn btn-akroma text-white\" /></td>\n                        </tr>\n                    </tbody>\n                </table>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col\">\n                <div class=\"alert alert-danger\" role=\"alert\">\n                  <p class=\"mb-0\">Please use a local node (localhost connection) during testing period. remote.akroma.io is under development and is not reliable</p>\n                </div>\n            </div>\n        </div>\n    </div>\n</ng-template>"
 
 /***/ }),
 
@@ -325,7 +321,7 @@ module.exports = "<div class=\"background\">\n    <div class=\"container h-100\"
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  text-transform: uppercase;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  .background {\n  background-image: url('akroma-bg4.png');\n  color: #fff;\n  background-size: cover;\n  min-height: 150px; }\n  .input-group {\n  width: 450px; }\n"
+module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .dropdown-akroma {\n  border-radius: 0;\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  .background {\n  background-image: url('akroma-bg4.png');\n  color: #fff;\n  background-size: cover;\n  min-height: 150px; }\n  .input-group {\n  width: 450px; }\n"
 
 /***/ }),
 
@@ -351,16 +347,30 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
 const forms_1 = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
 const router_1 = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
+const ngx_bootstrap_1 = __webpack_require__(/*! ngx-bootstrap */ "./node_modules/ngx-bootstrap/bundles/ngx-bootstrap.es2015.js");
 const utils_1 = __webpack_require__(/*! typesafe-web3/dist/lib/utils */ "./node_modules/typesafe-web3/dist/lib/utils.js");
+const settings_service_1 = __webpack_require__(/*! ../../services/settings.service */ "./src/app/services/settings.service.ts");
 let HeaderComponent = class HeaderComponent {
-    constructor(formBuilder, router) {
+    constructor(formBuilder, router, settings, modalService) {
         this.formBuilder = formBuilder;
         this.router = router;
+        this.settings = settings;
+        this.modalService = modalService;
+    }
+    openModal(template) {
+        this.modalRef = this.modalService.show(template, { class: 'akromaModal' });
     }
     ngOnInit() {
         this.lookupForm = this.formBuilder.group({
             lookup: this.formBuilder.control(''),
         });
+    }
+    get connectedTo() {
+        return this.settings.getConnectionUrl();
+    }
+    setConnection(url) {
+        this.settings.setConnectionUrl(url);
+        this.modalRef.hide();
     }
     onSubmit() {
         const lookupValue = this.lookupForm.value.lookup;
@@ -399,7 +409,9 @@ HeaderComponent = __decorate([
         styles: [__webpack_require__(/*! ./header.component.scss */ "./src/app/components/header/header.component.scss")]
     }),
     __metadata("design:paramtypes", [forms_1.FormBuilder,
-        router_1.Router])
+        router_1.Router,
+        settings_service_1.SettingsService,
+        ngx_bootstrap_1.BsModalService])
 ], HeaderComponent);
 exports.HeaderComponent = HeaderComponent;
 
@@ -424,7 +436,7 @@ module.exports = "<h1>Transactions</h1>\r\n<div *ngFor=\"let block of blocks$ | 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  text-transform: uppercase;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n"
+module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .dropdown-akroma {\n  border-radius: 0;\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n"
 
 /***/ }),
 
@@ -493,7 +505,7 @@ module.exports = "<app-header></app-header>\r\n\r\n<div class=\"page-body\">\r\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  text-transform: uppercase;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  :host, .page-body {\n  display: block;\n  min-height: 70vh; }\n  .sent {\n  color: #CF0000; }\n  .received {\n  color: green; }\n"
+module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .dropdown-akroma {\n  border-radius: 0;\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  :host, .page-body {\n  display: block;\n  min-height: 70vh; }\n  .sent {\n  color: #CF0000; }\n  .received {\n  color: green; }\n"
 
 /***/ }),
 
@@ -539,7 +551,7 @@ let AddressDetailsComponent = class AddressDetailsComponent {
                 this.total = result;
                 this.pages = result / 10;
             });
-            this.balance$ = rxjs_1.from(this.addressService.getBalacne(this.address));
+            this.balance$ = rxjs_1.from(this.addressService.getBalance(this.address));
             this.pageAddressTransactions({ init: true, page: 1 });
         });
     }
@@ -589,7 +601,7 @@ module.exports = "<app-header></app-header>\r\n\r\n<div class=\"page-body\">\r\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  text-transform: uppercase;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  :host, .page-body {\n  display: block;\n  min-height: 70vh; }\n"
+module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .dropdown-akroma {\n  border-radius: 0;\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  :host, .page-body {\n  display: block;\n  min-height: 70vh; }\n"
 
 /***/ }),
 
@@ -661,7 +673,7 @@ module.exports = "<app-header></app-header>\r\n\r\n<div class=\"page-body\">\r\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  text-transform: uppercase;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  :host, .page-body {\n  display: block;\n  min-height: 70vh; }\n"
+module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .dropdown-akroma {\n  border-radius: 0;\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  :host, .page-body {\n  display: block;\n  min-height: 70vh; }\n"
 
 /***/ }),
 
@@ -735,7 +747,7 @@ module.exports = "<app-header></app-header>\r\n\r\n<div class=\"page-body\">\r\n
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  text-transform: uppercase;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  :host, .page-body {\n  display: block;\n  min-height: 70vh; }\n"
+module.exports = ".card-akroma {\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25);\n  border-radius: 0 !important; }\n  .card-akroma a {\n    color: #FFFFFF;\n    text-decoration: underline; }\n  .dropdown-akroma {\n  border-radius: 0;\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma {\n  border-radius: 0;\n  background-color: #343a40 !important;\n  color: white;\n  box-shadow: 0px 8px 10px rgba(0, 0, 0, 0.25); }\n  .btn-akroma.on-form {\n    background-color: #1A1A1A !important; }\n  .table-akroma {\n  box-shadow: -8px 8px 10px rgba(0, 0, 0, 0.25); }\n  .table-akroma.table-dark tr td:first-child {\n    text-transform: uppercase; }\n  .table-akroma.table-dark a,\n  .table-akroma.table-dark a:visited {\n    color: #fff;\n    text-decoration: none; }\n  .table-akroma.table-dark a:hover,\n  .table-akroma.table-dark a.active {\n    text-decoration: underline;\n    opacity: 0.60; }\n  .form-control-akroma {\n  border: 1px solid #fbfbfb;\n  border-radius: 0; }\n  :host, .page-body {\n  display: block;\n  min-height: 70vh; }\n"
 
 /***/ }),
 
@@ -914,26 +926,65 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-const typesafe_web3_1 = __webpack_require__(/*! typesafe-web3 */ "./node_modules/typesafe-web3/dist/lib/index.js");
 const utils_1 = __webpack_require__(/*! typesafe-web3/dist/lib/utils */ "./node_modules/typesafe-web3/dist/lib/utils.js");
+const akroma_service_1 = __webpack_require__(/*! ./akroma.service */ "./src/app/services/akroma.service.ts");
 let AddressService = class AddressService {
-    constructor(typeSafeWeb3) {
-        this.typeSafeWeb3 = typeSafeWeb3;
+    constructor(akroma) {
+        this.akroma = akroma;
     }
-    async getBalacne(hash) {
-        console.log('called: getTransaction');
-        const result = await this.typeSafeWeb3.getBalance(hash);
+    async getBalance(hash) {
+        console.log('called: getBalance');
+        const result = await this.akroma.connect().getBalance(hash);
         if (result.ok) {
             return utils_1.default.fromWei(result.data, 'ether').toString();
         }
-        return Promise.reject('could not get block');
+        return Promise.reject('could not get balance');
     }
 };
 AddressService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typesafe_web3_1.TypeSafeWeb3])
+    __metadata("design:paramtypes", [akroma_service_1.AkromaService])
 ], AddressService);
 exports.AddressService = AddressService;
+
+
+/***/ }),
+
+/***/ "./src/app/services/akroma.service.ts":
+/*!********************************************!*\
+  !*** ./src/app/services/akroma.service.ts ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+const typesafe_web3_1 = __webpack_require__(/*! typesafe-web3 */ "./node_modules/typesafe-web3/dist/lib/index.js");
+const settings_service_1 = __webpack_require__(/*! ./settings.service */ "./src/app/services/settings.service.ts");
+let AkromaService = class AkromaService {
+    constructor(settingsService) {
+        this.settingsService = settingsService;
+    }
+    connect() {
+        return new typesafe_web3_1.TypeSafeWeb3(this.settingsService.getConnectionUrl());
+    }
+};
+AkromaService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [settings_service_1.SettingsService])
+], AkromaService);
+exports.AkromaService = AkromaService;
 
 
 /***/ }),
@@ -958,20 +1009,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-const typesafe_web3_1 = __webpack_require__(/*! typesafe-web3 */ "./node_modules/typesafe-web3/dist/lib/index.js");
+const akroma_service_1 = __webpack_require__(/*! ./akroma.service */ "./src/app/services/akroma.service.ts");
 let BlockService = class BlockService {
-    constructor(typeSafeWeb3) {
-        this.typeSafeWeb3 = typeSafeWeb3;
+    constructor(akroma) {
+        this.akroma = akroma;
     }
     async getBlocks() {
         console.log('called: getBlocks');
         const blocks = [];
-        const latest = await this.typeSafeWeb3.getBlockByNumber('latest', true);
+        const latest = await this.akroma.connect().getBlockByNumber('latest', true);
         if (latest.data !== undefined && latest.data.number !== undefined) {
             blocks.push(latest.data);
             const stop = latest.data.number - 10;
             for (let index = latest.data.number; index > stop; index--) {
-                const next = await this.typeSafeWeb3.getBlockByNumber(index, true);
+                const next = await this.akroma.connect().getBlockByNumber(index, true);
                 if (next.data !== undefined) {
                     blocks.push(next.data);
                 }
@@ -982,8 +1033,8 @@ let BlockService = class BlockService {
     async getBlock(numberOrHash) {
         console.log('called: getBlock');
         const result = (this.isHash(numberOrHash) === true)
-            ? await this.typeSafeWeb3.getBlockByHash(numberOrHash)
-            : await this.typeSafeWeb3.getBlockByNumber(parseInt(numberOrHash, 10));
+            ? await this.akroma.connect().getBlockByHash(numberOrHash)
+            : await this.akroma.connect().getBlockByNumber(parseInt(numberOrHash, 10));
         if (result.ok && result.data !== undefined) {
             return result.data;
         }
@@ -995,9 +1046,53 @@ let BlockService = class BlockService {
 };
 BlockService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typesafe_web3_1.TypeSafeWeb3])
+    __metadata("design:paramtypes", [akroma_service_1.AkromaService])
 ], BlockService);
 exports.BlockService = BlockService;
+
+
+/***/ }),
+
+/***/ "./src/app/services/settings.service.ts":
+/*!**********************************************!*\
+  !*** ./src/app/services/settings.service.ts ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+let SettingsService = class SettingsService {
+    constructor() { }
+    getConnectionUrl() {
+        const url = localStorage.getItem('connection_url');
+        if (url !== null) {
+            return url;
+        }
+        return 'http://localhost:8545';
+    }
+    setConnectionUrl(url) {
+        // TODO: validation.
+        localStorage.setItem('connection_url', url);
+        return url;
+    }
+};
+SettingsService = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [])
+], SettingsService);
+exports.SettingsService = SettingsService;
 
 
 /***/ }),
@@ -1022,14 +1117,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
-const typesafe_web3_1 = __webpack_require__(/*! typesafe-web3 */ "./node_modules/typesafe-web3/dist/lib/index.js");
+const akroma_service_1 = __webpack_require__(/*! ./akroma.service */ "./src/app/services/akroma.service.ts");
 let TransactionService = class TransactionService {
-    constructor(typeSafeWeb3) {
-        this.typeSafeWeb3 = typeSafeWeb3;
+    constructor(akroma) {
+        this.akroma = akroma;
     }
     async getTransaction(hash) {
         console.log('called: getTransaction');
-        const result = await this.typeSafeWeb3.getTransactionByHash(hash);
+        const result = await this.akroma.connect().getTransactionByHash(hash);
         if (result.ok && result.data !== undefined) {
             return result.data;
         }
@@ -1037,7 +1132,7 @@ let TransactionService = class TransactionService {
     }
     async getTransactionCountByAddress(hash) {
         console.log('called: getTransactionCountByAddress');
-        const result = await this.typeSafeWeb3.getTransactionCountByAddress(hash);
+        const result = await this.akroma.connect().getTransactionCountByAddress(hash);
         if (result.ok && result.data !== undefined) {
             return result.data;
         }
@@ -1045,7 +1140,7 @@ let TransactionService = class TransactionService {
     }
     async getTransactionsAndBlockByAddress(hash, page) {
         console.log('called: getTransactionsAndBlockByAddress');
-        const result = await this.typeSafeWeb3.getTransactionsAndBlockByAddress(hash, page);
+        const result = await this.akroma.connect().getTransactionsAndBlockByAddress(hash, page);
         if (result.ok && result.data !== undefined) {
             return result.data;
         }
@@ -1053,7 +1148,7 @@ let TransactionService = class TransactionService {
     }
     async getTransactionsByAddress(hash) {
         console.log('called: getTransactionsByAddress');
-        const result = await this.typeSafeWeb3.getTransactionsByAddress(hash);
+        const result = await this.akroma.connect().getTransactionsByAddress(hash);
         if (result.ok && result.data !== undefined) {
             return result.data;
         }
@@ -1062,7 +1157,7 @@ let TransactionService = class TransactionService {
 };
 TransactionService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [typesafe_web3_1.TypeSafeWeb3])
+    __metadata("design:paramtypes", [akroma_service_1.AkromaService])
 ], TransactionService);
 exports.TransactionService = TransactionService;
 
