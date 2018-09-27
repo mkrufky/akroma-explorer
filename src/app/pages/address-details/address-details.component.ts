@@ -33,7 +33,7 @@ export class AddressDetailsComponent implements OnInit {
           this.total = result;
           this.pages = result / 10;
         });
-      this.balance$ = from(this.addressService.getBalacne(this.address));
+      this.balance$ = from(this.addressService.getBalance(this.address));
       this.pageAddressTransactions({ init: true, page: 1 });
     });
   }

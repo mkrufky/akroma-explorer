@@ -3,9 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
-import { ModalModule, PaginationModule } from 'ngx-bootstrap';
+import { BsDropdownModule, ModalModule, PaginationModule } from 'ngx-bootstrap';
 import { NgxQRCodeModule } from 'ngx-qrcode2';
-import { TypeSafeWeb3 } from 'typesafe-web3';
 import { AppComponent } from './app.component';
 import { AddressQrcodeComponent } from './components/address-qrcode/address-qrcode.component';
 import { BlocksPanelComponent } from './components/blocks-panel/blocks-panel.component';
@@ -19,7 +18,9 @@ import { HexToAsciiPipe } from './pipes/hex-to-ascii.pipe';
 import { UnixTimestampToDatePipe } from './pipes/unix-timestamp-to-date.pipe';
 import { RoutingModule } from './routing.module';
 import { AddressService } from './services/address.service';
+import { AkromaService } from './services/akroma.service';
 import { BlockService } from './services/block.service';
+import { SettingsService } from './services/settings.service';
 import { TransactionService } from './services/transaction.service';
 
 @NgModule({
@@ -48,6 +49,7 @@ import { TransactionService } from './services/transaction.service';
     ModalModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
+    BsDropdownModule.forRoot(),
     NgxQRCodeModule,
     HttpClientModule,
   ],
@@ -55,16 +57,9 @@ import { TransactionService } from './services/transaction.service';
     BlockService,
     TransactionService,
     AddressService,
-    {
-      provide: TypeSafeWeb3,
-      useFactory: getTypeSafeWeb3
-    },
+    SettingsService,
+    AkromaService,
   ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-
-export function getTypeSafeWeb3(): TypeSafeWeb3 {
-  return new TypeSafeWeb3('http://localhost:8545');
-}
