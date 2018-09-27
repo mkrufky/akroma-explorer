@@ -1,0 +1,21 @@
+<div class="background">
+    <div class="container h-100">
+        <div class="row pt-4">
+            <div class="col">
+                <a href="/">
+                    <img src="../../assets/images/akroma-logo-on-black.svg" alt="Akroma">
+                </a>
+            </div>
+            <div class="col text-right">
+                <form class="form-inline my-2 my-lg-0 float-right" [formGroup]="lookupForm" (ngSubmit)="onSubmit()" novalidate>
+                    <div class="input-group">
+                        <input formControlName="lookup" type="text" class="form-control form-control-akroma" placeholder="Address | Transaction | Block" aria-label="" aria-describedby="">
+                        <div class="input-group-append">
+                            <button class="btn btn-akroma" type="submit">search</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
