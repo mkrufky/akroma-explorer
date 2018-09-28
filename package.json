@@ -4,11 +4,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "push": "ng build && git subtree split --prefix dist/explorer -b gh-pages && git push -f origin gh-pages:gh-pages && git branch -D gh-pages"
+    "push": "ng build --prod && git subtree split --prefix dist/explorer -b gh-pages && git push -f origin gh-pages:gh-pages && git branch -D gh-pages"
   },
   "private": true,
   "dependencies": {
