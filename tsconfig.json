@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/",
+    "sourceMap": true,
     "declaration": false,
     "module": "commonjs",
     "target": "ES2017",
