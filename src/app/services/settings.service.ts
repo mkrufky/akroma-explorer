@@ -8,7 +8,7 @@ export class SettingsService {
         if (url !== null) {
             return url;
         }
-        return 'http://localhost:8545';
+        return 'https://remote.akroma.io';
     }
 
     public setConnectionUrl(url: string): string {
