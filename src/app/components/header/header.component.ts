@@ -1,7 +1,7 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import { BsModalRef } from 'ngx-bootstrap';
 import Utils from 'typesafe-web3/dist/lib/utils';
 import { SettingsService } from '../../services/settings.service';
 
@@ -18,11 +18,7 @@ export class HeaderComponent implements OnInit {
     private formBuilder: FormBuilder,
     public router: Router,
     private settings: SettingsService,
-    private modalService: BsModalService
-  ) { }
-
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, { class: 'akromaModal' });
+  ) {
   }
 
   ngOnInit() {
@@ -33,11 +29,6 @@ export class HeaderComponent implements OnInit {
 
   get connectedTo(): string {
     return this.settings.getConnectionUrl();
-  }
-
-  setConnection(url: string) {
-    this.settings.setConnectionUrl(url);
-    this.modalRef.hide();
   }
 
   onSubmit() {

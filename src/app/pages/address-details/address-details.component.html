@@ -17,7 +17,9 @@
               <td>
                 {{ address }}
                 <span class="float-right">
-                    <app-address-qrcode [hash]="address"></app-address-qrcode>
+                  <app-address-qrcode [hash]="address"></app-address-qrcode>
+                  &nbsp;&nbsp;
+                  <app-bookmark [hash]="address"></app-bookmark>
                 </span>
               </td>
             </tr>
@@ -61,9 +63,9 @@
             <tbody>
               <tr *ngFor="let transaction of trans">
                 <td>
-                    <a [routerLink]="['/', 'transaction', transaction.hash]" class="transaction-hash-link">
-                      {{ transaction.hash | slice:0:20 }}...
-                    </a>
+                  <a [routerLink]="['/', 'transaction', transaction.hash]" class="transaction-hash-link">
+                    {{ transaction.hash | slice:0:20 }}...
+                  </a>
                 </td>
                 <td>{{ transaction.ts | unixTimestampToDate | date:'yyyy-MM-dd HH:mm:ss' }}</td>
                 <td>
