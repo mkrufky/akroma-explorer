@@ -8,7 +8,10 @@ import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { AppComponent } from './app.component';
 import { AddressQrcodeComponent } from './components/address-qrcode/address-qrcode.component';
 import { BlocksPanelComponent } from './components/blocks-panel/blocks-panel.component';
+import { BookmarkComponent } from './components/bookmark/bookmark.component';
 import { HeaderComponent } from './components/header/header.component';
+import { SettingsBookmarksComponent } from './components/settings-bookmarks/settings-bookmarks.component';
+import { SettingsConnectionComponent } from './components/settings-connection/settings-connection.component';
 import { TransactionsPanelComponent } from './components/transactions-panel/transactions-panel.component';
 import { AddressDetailsComponent } from './pages/address-details/address-details.component';
 import { BlockDetailsComponent } from './pages/block-details/block-details.component';
@@ -21,12 +24,10 @@ import { RoutingModule } from './routing.module';
 import { AddressService } from './services/address.service';
 import { AkromaService } from './services/akroma.service';
 import { BlockService } from './services/block.service';
+import { BookmarkService } from './services/bookmark.service';
 import { MasternodeService } from './services/masternode.service';
 import { SettingsService } from './services/settings.service';
 import { TransactionService } from './services/transaction.service';
-import { SettingsConnectionComponent } from './components/settings-connection/settings-connection.component';
-import { SettingsBookmarksComponent } from './components/settings-bookmarks/settings-bookmarks.component';
-import { BookmarkComponent } from './components/bookmark/bookmark.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +71,7 @@ import { BookmarkComponent } from './components/bookmark/bookmark.component';
     SettingsService,
     AkromaService,
     MasternodeService,
+    BookmarkService,
   ],
   bootstrap: [AppComponent]
 })
