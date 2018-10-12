@@ -11,6 +11,6 @@ export class MasternodeService {
     public getStatusList(): Observable<ApiResult<MasternodeStatusModel[]>> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
         return this.http
-            .get<ApiResult<MasternodeStatusModel[]>>(`http://localhost:2022/api/masternodes/remote`, { headers: headers });
+            .get<ApiResult<MasternodeStatusModel[]>>(`https://akroma.io/api/masternodes/remote`, { headers: headers });
     }
 }
